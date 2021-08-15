@@ -124,7 +124,7 @@ const loadTaskList = (taskListName) => {
 
 addTaskButton.onclick = createNewTask;
 inputNameField.onkeydown = (e) => {
-	if (e.keyCode === '13') createNewTask(e);
+	if (e.key === 'Enter') createNewTask(e);
 	if (e.key === 'Escape') inputNameField.blur();
 };
 
