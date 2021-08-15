@@ -1,43 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Document</title>
-      <link rel="stylesheet" href="css/style.min.css" />
-   </head>
-   <body>
-      <div class="container">
-         <h1 class="title">SimpleTodo</h1>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<link rel="stylesheet" href="css/style.min.css" />
+	</head>
+	<body>
+		<div class="container">
+			<h1 class="title">SimpleTodo</h1>
 
-         <div class="newtask">
-            <input type="text" class="newtask__name" />
-            <button class="newtask__create">Create</button>
+			<div class="newtask">
+				<input type="text" class="newtask__name" />
 
-            <button id="setDateBtn">Set Date</button>
-            <input type="date" />
-            <button id="setTimeBtn">Set Time</button>
-            <input type="time" />
-         </div>
+				<button id="setDateBtn">Set Date</button>
+				<input type="date" />
+				<button id="setTimeBtn">Set Time</button>
+				<input type="time" />
+				<select name="priority" id="priority">
+					<option value="Priority 1">Priority 1</option>
+					<option value="Priority 2">Priority 2</option>
+					<option value="Priority 3">Priority 3</option>
+					<option value="Priority 4" selected="selected">Priority 4</option>
+				</select>
 
-         <ul class="list"></ul>
+				<button class="newtask__create">Create</button>
+			</div>
 
-         <!-- <li class="list__item" data-task-id="1">
-            <label>
-               <input type="checkbox" />
-            </label>
-            <div class="list__item_main">
-               <div class="list__item_name">Task 1</div>
-               <div class="list__item_date">2021-08-28</div>
-               <div class="list__item_time">12:00</div>
-            </div>
-            <div class="list__item_buttons">
-               <button class="list__item_delete">X</button>
-            </div>
-         </li> -->
-      </div>
+			<ul class="list">
+				<div class="list__buttons">
+					<!-- <button id="sortByPriority">Sort By Priority</button> -->
+				</div>
+			</ul>
 
-      <script src="app.js"></script>
-   </body>
+			<!-- <li class="list__item" data-priority="2">
+				<label>
+					<input type="checkbox" />
+				</label>
+				<div class="list__item_main">
+					<div class="list__item_name">Task 1</div>
+					<div class="list__item_date">2021-08-28</div>
+					<div class="list__item_time">12:00</div>
+					<div class="list__item_priority">Priority 2</div>
+				</div>
+				<div class="list__item_buttons">
+					<button class="list__item_delete">X</button>
+				</div>
+			</li> -->
+		</div>
+
+		<script src="app.js"></script>
+	</body>
 </html>
