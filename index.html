@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-		<link rel="stylesheet" href="css/style.min.css" />
-	</head>
-	<body>
-		<div class="container">
-			<h1 class="title">SimpleTodo</h1>
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+      <link rel="stylesheet" href="css/style.min.css" />
+   </head>
+   <body>
+      <div class="container">
+         <h1 class="title">SimpleTodo</h1>
 
-			<div class="newtask">
-				<input type="text" class="newtask__name" />
-				<button id="setDateBtn">Set Date</button>
-				<input type="date" />
-				<button id="setTimeBtn">Set Time</button>
-				<input type="time" />
-				<button class="newtask__create">Create</button>
-			</div>
+         <div class="newtask">
+            <input type="text" class="newtask__name" />
+            <button class="newtask__create">Create</button>
 
-			<ul class="list"></ul>
-			<!-- 			<li class="list__item" data-task-id="1">
-				<div class="list__item_main">
-					<div class="list__item_name">Task 1</div>
-					<div class="list__item_deadline">
-						<div class="list__item_date">2021-08-28</div>
-						<div class="list__item_time">12:00</div>
-					</div>
-				</div>
-				<div class="list__item_buttons">
-					<button class="list__item_delete">X</button>
-					<button class="list__item_done">Done</button>
-				</div>
-			</li> -->
-		</div>
+            <button id="setDateBtn">Set Date</button>
+            <input type="date" />
+            <button id="setTimeBtn">Set Time</button>
+            <input type="time" />
+         </div>
 
-		<script src="app.js"></script>
-	</body>
+         <ul class="list"></ul>
+
+         <!-- <li class="list__item" data-task-id="1">
+            <label>
+               <input type="checkbox" />
+            </label>
+            <div class="list__item_main">
+               <div class="list__item_name">Task 1</div>
+               <div class="list__item_date">2021-08-28</div>
+               <div class="list__item_time">12:00</div>
+            </div>
+            <div class="list__item_buttons">
+               <button class="list__item_delete">X</button>
+            </div>
+         </li> -->
+      </div>
+
+      <script src="app.js"></script>
+   </body>
 </html>
