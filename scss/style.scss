@@ -1,56 +1,85 @@
 * {
-   font-family: Roboto;
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box;
-   outline: none;
+	font-family: Roboto;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	outline: none;
 }
 
 .container {
-   width: 500px;
-   max-width: 100%;
-   margin: 0 auto;
+	width: 500px;
+	max-width: 100%;
+	margin: 0 auto;
 }
 
 .title {
-   text-align: center;
+	text-align: center;
 }
 
-.create {
-   margin-top: 10px;
-   display: flex;
-   justify-content: center;
-   &__button {
-      margin-left: 10px;
-      padding: 0 5px;
-   }
+.newtask {
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	input {
+		margin-right: 10px;
+		&[type='date'] {
+			display: none;
+		}
+		&[type='time'] {
+			display: none;
+		}
+	}
+	#setTimeBtn {
+		display: none;
+	}
+	button {
+		padding: 0 5px;
+		&:not(:last-child) {
+			margin-right: 10px;
+		}
+	}
 }
 .list {
-   border-top: solid 1px #666;
-   margin: 30px auto 0;
-   padding: 20px 10px;
-   &__item {
-      list-style-type: none;
-      display: flex;
-      justify-content: space-between;
-      padding: 8px 12px;
-      border: solid 1px #aaa;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      &[done] {
-         .list__item_name {
-            text-decoration: line-through;
-            color: #aaa;
-         }
-      }
-      &_name {
-         flex-grow: 1;
-      }
-      &_delete {
-         padding: 0 5px;
-      }
-      &_done {
-         padding: 0 5px;
-      }
-   }
+	border-top: solid 1px #666;
+	margin: 30px auto 0;
+	padding: 20px 10px;
+	&__item {
+		list-style-type: none;
+		display: flex;
+		justify-content: space-between;
+		padding: 8px 12px;
+		border: solid 1px #aaa;
+		margin-bottom: 10px;
+		border-radius: 5px;
+		&[done] {
+			.list__item_name {
+				text-decoration: line-through;
+				color: #aaa;
+			}
+		}
+		&_main {
+			flex-grow: 1;
+		}
+		&_name {
+			font-size: 16px;
+		}
+		&_deadline {
+			margin-top: 4px;
+		}
+		&_date,
+		&_time {
+			font-size: 13px;
+			line-height: 100%;
+			font-weight: 200;
+			display: inline-block;
+			margin-right: 8px;
+			color: #888;
+		}
+		&_delete {
+			padding: 0 5px;
+		}
+		&_done {
+			padding: 0 5px;
+		}
+	}
 }
