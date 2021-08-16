@@ -4,6 +4,7 @@ const addTaskButton = createTaskSection.querySelector(".newtask__create");
 const setDateBtn = createTaskSection.querySelector("#setDateBtn");
 const setTimeBtn = createTaskSection.querySelector("#setTimeBtn");
 const taskListInDOM = document.querySelector(".list__items");
+const sortByNameBtn = document.querySelector("#sortByName");
 const sortByPriorityBtn = document.querySelector("#sortByPriority");
 const clearListBtn = document.querySelector("#clearList");
 const taskListName = "Main Task List";
@@ -161,6 +162,28 @@ const sortByPriority = () => {
    localStorage.setItem(taskListName, JSON.stringify(taskListSorted));
 };
 
+const sortByName = () => {
+   if (!localStorage[taskListName]) return;
+   let taskList = JSON.parse(localStorage[taskListName]);
+
+   sortByNameBtn.hasAttribute("reverse") ? taskList.sort(compareNamesReverse) : taskList.sort(compareNames);
+   localStorage.setItem(taskListName, JSON.stringify(taskList));
+   sortByNameBtn.toggleAttribute("reverse");
+
+   taskListInDOM.innerHTML = "";
+   for (let i = 0; i < taskList.length; i++) {
+      let taskData = taskList[i];
+
+      let taskName = taskData.taskName,
+         taskIsDone = taskData.taskIsDone,
+         taskDate = taskData.taskDate,
+         taskTime = taskData.taskTime,
+         taskPriority = taskData.taskPriority;
+
+      revealTaskInDOM(taskListName, taskName, taskIsDone, taskDate, taskTime, taskPriority);
+   }
+};
+
 const clearList = () => {
    taskListInDOM.innerHTML = "";
    localStorage.removeItem(taskListName);
@@ -185,11 +208,28 @@ setTimeBtn.onclick = (e) => {
    e.target.style.display = "none";
 };
 
+sortByNameBtn.onclick = sortByName;
 sortByPriorityBtn.onclick = sortByPriority;
 clearListBtn.onclick = clearList;
 
-function insertAfter(newNode, existingNode) {
+insertAfter = (newNode, existingNode) => {
    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+};
+
+function compareNames(a, b) {
+   a = a.taskName.toLowerCase();
+   b = b.taskName.toLowerCase();
+   if (a > b) return 1;
+   if (a == b) return 0;
+   if (a < b) return -1;
+}
+
+function compareNamesReverse(a, b) {
+   a = a.taskName.toLowerCase();
+   b = b.taskName.toLowerCase();
+   if (a > b) return -1;
+   if (a == b) return 0;
+   if (a < b) return 1;
 }
 
 loadTaskList("Main Task List");

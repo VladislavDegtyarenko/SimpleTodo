@@ -71,6 +71,14 @@
          content: "\002191";
          margin-left: 5px;
       }
+      #sortByName:after {
+         content: "\002193";
+         margin-left: 5px;
+      }
+      #sortByName[reverse]:after {
+         content: "\002191";
+         margin-left: 5px;
+      }
    }
    &__item {
       list-style-type: none;
