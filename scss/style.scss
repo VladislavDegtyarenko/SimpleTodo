@@ -63,19 +63,11 @@
             margin-right: 10px;
          }
       }
-      #sortByPriority:after {
+      &_sort:after {
          content: "\002193";
          margin-left: 5px;
       }
-      #sortByPriority[reverse]:after {
-         content: "\002191";
-         margin-left: 5px;
-      }
-      #sortByName:after {
-         content: "\002193";
-         margin-left: 5px;
-      }
-      #sortByName[reverse]:after {
+      &_sort[reverse]:after {
          content: "\002191";
          margin-left: 5px;
       }

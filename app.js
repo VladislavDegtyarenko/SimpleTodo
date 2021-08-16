@@ -6,6 +6,7 @@ const setTimeBtn = createTaskSection.querySelector("#setTimeBtn");
 const taskListInDOM = document.querySelector(".list__items");
 const sortByNameBtn = document.querySelector("#sortByName");
 const sortByPriorityBtn = document.querySelector("#sortByPriority");
+const sortByDeadlineBtn = document.querySelector("#sortByDeadline");
 const clearListBtn = document.querySelector("#clearList");
 const taskListName = "Main Task List";
 
@@ -184,6 +185,28 @@ const sortByName = () => {
    }
 };
 
+const sortByDeadline = () => {
+   if (!localStorage[taskListName]) return;
+   let taskList = JSON.parse(localStorage[taskListName]);
+
+   sortByDeadlineBtn.hasAttribute("reverse") ? taskList.sort(compareDLReverse) : taskList.sort(compareDL);
+   localStorage.setItem(taskListName, JSON.stringify(taskList));
+   sortByDeadlineBtn.toggleAttribute("reverse");
+
+   taskListInDOM.innerHTML = "";
+   for (let i = 0; i < taskList.length; i++) {
+      let taskData = taskList[i];
+
+      let taskName = taskData.taskName,
+         taskIsDone = taskData.taskIsDone,
+         taskDate = taskData.taskDate,
+         taskTime = taskData.taskTime,
+         taskPriority = taskData.taskPriority;
+
+      revealTaskInDOM(taskListName, taskName, taskIsDone, taskDate, taskTime, taskPriority);
+   }
+};
+
 const clearList = () => {
    taskListInDOM.innerHTML = "";
    localStorage.removeItem(taskListName);
@@ -210,6 +233,7 @@ setTimeBtn.onclick = (e) => {
 
 sortByNameBtn.onclick = sortByName;
 sortByPriorityBtn.onclick = sortByPriority;
+sortByDeadlineBtn.onclick = sortByDeadline;
 clearListBtn.onclick = clearList;
 
 insertAfter = (newNode, existingNode) => {
@@ -227,6 +251,22 @@ function compareNames(a, b) {
 function compareNamesReverse(a, b) {
    a = a.taskName.toLowerCase();
    b = b.taskName.toLowerCase();
+   if (a > b) return -1;
+   if (a == b) return 0;
+   if (a < b) return 1;
+}
+
+function compareDL(a, b) {
+   a = a.taskDate || -1;
+   b = b.taskDate || -1;
+   if (a > b) return 1;
+   if (a == b) return 0;
+   if (a < b) return -1;
+}
+
+function compareDLReverse(a, b) {
+   a = a.taskDate || -1;
+   b = b.taskDate || -1;
    if (a > b) return -1;
    if (a == b) return 0;
    if (a < b) return 1;
