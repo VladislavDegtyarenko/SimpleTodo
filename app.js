@@ -123,26 +123,34 @@ const loadTaskList = () => {
 const sortByPriority = () => {
 	if (!localStorage[taskListName]) return;
 	let taskList = JSON.parse(localStorage[taskListName]);
-	let taskListSorted = [];
-	let prioritiesArray = ['Priority 1', 'Priority 2', 'Priority 3', 'Priority 4'];
-	sortByPriorityBtn.hasAttribute('reverse') ? prioritiesArray.reverse() : prioritiesArray;
-	sortByPriorityBtn.toggleAttribute('reverse');
+	//let prioritiesArray = ['Priority 1', 'Priority 2', 'Priority 3', 'Priority 4'];
+	/* sortByPriorityBtn.hasAttribute('reverse') ? prioritiesArray.reverse() : prioritiesArray;
+	sortByPriorityBtn.toggleAttribute('reverse'); */
 
-	taskListInDOM.innerHTML = '';
-
-	for (let priority of prioritiesArray) {
+	/* 	for (let priority of prioritiesArray) {
 		for (let i = 0; i < taskList.length; i++) {
 			let taskData = taskList[i];
-			let [{ taskPriority }] = taskData.taskPriority;
+			let taskPriority = taskData.taskPriority;
 
 			if (taskPriority == priority) {
-				revealTaskInDOM(taskData[i]);
-				taskListSorted.push(taskData[i]);
+				revealTaskInDOM(taskData);
+				taskListSorted.push(taskData);
 			}
 		}
-	}
+	} */
 
-	localStorage.setItem(taskListName, JSON.stringify(taskListSorted));
+	sortByPriorityBtn.hasAttribute('reverse')
+		? taskList.sort(comparePriorityReverse)
+		: taskList.sort(comparePriority);
+	sortByPriorityBtn.toggleAttribute('reverse');
+
+	localStorage.setItem(taskListName, JSON.stringify(taskList));
+
+	taskListInDOM.innerHTML = '';
+	for (let i = 0; i < taskList.length; i++) {
+		let taskData = taskList[i];
+		revealTaskInDOM(taskData);
+	}
 };
 
 const sortByName = () => {
@@ -152,14 +160,14 @@ const sortByName = () => {
 	sortByNameBtn.hasAttribute('reverse')
 		? taskList.sort(compareNamesReverse)
 		: taskList.sort(compareNames);
-	localStorage.setItem(taskListName, JSON.stringify(taskList));
 	sortByNameBtn.toggleAttribute('reverse');
+
+	localStorage.setItem(taskListName, JSON.stringify(taskList));
 
 	taskListInDOM.innerHTML = '';
 	for (let i = 0; i < taskList.length; i++) {
 		let taskData = taskList[i];
-
-		revealTaskInDOM(taskData[i]);
+		revealTaskInDOM(taskData);
 	}
 };
 
@@ -176,19 +184,13 @@ const sortByDeadline = () => {
 	taskListInDOM.innerHTML = '';
 	for (let i = 0; i < taskList.length; i++) {
 		let taskData = taskList[i];
-		revealTaskInDOM(taskData[i]);
+		revealTaskInDOM(taskData);
 	}
 };
 
 const clearList = () => {
 	taskListInDOM.innerHTML = '';
 	localStorage.removeItem(taskListName);
-};
-
-addTaskButton.onclick = createNewTask;
-inputNameField.onkeydown = (e) => {
-	if (e.key === 'Enter') createNewTask(e);
-	if (e.key === 'Escape') inputNameField.blur();
 };
 
 setDateBtn.onclick = (e) => {
@@ -204,45 +206,66 @@ setTimeBtn.onclick = (e) => {
 	e.target.style.display = 'none';
 };
 
-sortByNameBtn.onclick = sortByName;
-sortByPriorityBtn.onclick = sortByPriority;
-sortByDeadlineBtn.onclick = sortByDeadline;
-clearListBtn.onclick = clearList;
-
 insertAfter = (newNode, existingNode) => {
 	existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 };
 
-function compareNames(a, b) {
+const compareNames = (a, b) => {
 	a = a.taskName.toLowerCase();
 	b = b.taskName.toLowerCase();
 	if (a > b) return 1;
 	if (a == b) return 0;
 	if (a < b) return -1;
-}
+};
 
-function compareNamesReverse(a, b) {
+const compareNamesReverse = (a, b) => {
 	a = a.taskName.toLowerCase();
 	b = b.taskName.toLowerCase();
 	if (a > b) return -1;
 	if (a == b) return 0;
 	if (a < b) return 1;
-}
+};
 
-function compareDL(a, b) {
+const comparePriority = (a, b) => {
+	a = a.taskPriority;
+	b = b.taskPriority;
+	if (a > b) return 1;
+	if (a == b) return 0;
+	if (a < b) return -1;
+};
+
+const comparePriorityReverse = (a, b) => {
+	a = a.taskPriority;
+	b = b.taskPriority;
+	if (a > b) return -1;
+	if (a == b) return 0;
+	if (a < b) return 1;
+};
+
+const compareDL = (a, b) => {
 	a = a.taskDate || -1;
 	b = b.taskDate || -1;
 	if (a > b) return 1;
 	if (a == b) return 0;
 	if (a < b) return -1;
-}
+};
 
-function compareDLReverse(a, b) {
+const compareDLReverse = (a, b) => {
 	a = a.taskDate || -1;
 	b = b.taskDate || -1;
 	if (a > b) return -1;
 	if (a == b) return 0;
 	if (a < b) return 1;
-}
+};
 
-loadTaskList('Main Task List');
+inputNameField.onkeydown = (e) => {
+	if (e.key === 'Enter') createNewTask(e);
+	if (e.key === 'Escape') inputNameField.blur();
+};
+addTaskButton.onclick = createNewTask;
+
+sortByNameBtn.onclick = sortByName;
+sortByPriorityBtn.onclick = sortByPriority;
+sortByDeadlineBtn.onclick = sortByDeadline;
+clearListBtn.onclick = clearList;
+document.onload = loadTaskList();
