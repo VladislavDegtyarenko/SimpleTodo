@@ -5,6 +5,7 @@ const setDateBtn = createTaskSection.querySelector("#setDateBtn");
 const setTimeBtn = createTaskSection.querySelector("#setTimeBtn");
 const taskListInDOM = document.querySelector(".list__items");
 const sortByPriorityBtn = document.querySelector("#sortByPriority");
+const clearListBtn = document.querySelector("#clearList");
 const taskListName = "Main Task List";
 
 const createNewTask = () => {
@@ -160,6 +161,11 @@ const sortByPriority = () => {
    localStorage.setItem(taskListName, JSON.stringify(taskListSorted));
 };
 
+const clearList = () => {
+   taskListInDOM.innerHTML = "";
+   localStorage.removeItem(taskListName);
+};
+
 addTaskButton.onclick = createNewTask;
 inputNameField.onkeydown = (e) => {
    if (e.key === "Enter") createNewTask(e);
@@ -180,6 +186,7 @@ setTimeBtn.onclick = (e) => {
 };
 
 sortByPriorityBtn.onclick = sortByPriority;
+clearListBtn.onclick = clearList;
 
 function insertAfter(newNode, existingNode) {
    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
