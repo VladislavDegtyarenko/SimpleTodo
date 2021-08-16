@@ -3,7 +3,9 @@ const inputNameField = createTaskSection.querySelector('.newtask__name');
 const addTaskButton = createTaskSection.querySelector('.newtask__create');
 const setDateBtn = createTaskSection.querySelector('#setDateBtn');
 const setTimeBtn = createTaskSection.querySelector('#setTimeBtn');
-const taskListInDOM = document.querySelector('.list');
+const taskListInDOM = document.querySelector('.list__items');
+const sortByPriorityBtn = document.querySelector('#sortByPriority');
+const taskListName = 'Main Task List';
 
 const createNewTask = () => {
 	const taskName = inputNameField.value.trim();
@@ -122,6 +124,40 @@ const loadTaskList = (taskListName) => {
 	}
 };
 
+const sortByPriority = () => {
+	if (!localStorage[taskListName]) return;
+	let taskList = JSON.parse(localStorage[taskListName]);
+	let taskListSorted = [];
+	let prioritiesArray = ['Priority 1', 'Priority 2', 'Priority 3', 'Priority 4'];
+
+	taskListInDOM.innerHTML = '';
+
+	for (let priority of prioritiesArray) {
+		for (let i = 0; i < taskList.length; i++) {
+			let taskData = taskList[i];
+
+			let taskName = taskData.taskName,
+				taskIsDone = taskData.taskIsDone,
+				taskDate = taskData.taskDate,
+				taskTime = taskData.taskTime,
+				taskPriority = taskData.taskPriority;
+
+			if (taskPriority == priority) {
+				revealTaskInDOM(taskListName, taskName, taskIsDone, taskDate, taskTime, taskPriority);
+				taskListSorted.push({
+					taskName,
+					taskIsDone,
+					taskDate,
+					taskTime,
+					taskPriority,
+				});
+			}
+		}
+	}
+
+	localStorage.setItem(taskListName, JSON.stringify(taskListSorted));
+};
+
 addTaskButton.onclick = createNewTask;
 inputNameField.onkeydown = (e) => {
 	if (e.key === 'Enter') createNewTask(e);
@@ -141,19 +177,10 @@ setTimeBtn.onclick = (e) => {
 	e.target.style.display = 'none';
 };
 
+sortByPriorityBtn.onclick = sortByPriority;
+
 function insertAfter(newNode, existingNode) {
 	existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }
 
 loadTaskList('Main Task List');
-
-/* let taskListExample = [
-	{
-		taskName: 'cold shower',
-		taskIsDone: false,
-	},
-	{
-		taskName: 'drink water 2L',
-		taskIsDone: false,
-	},
-]; */
