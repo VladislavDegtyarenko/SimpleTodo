@@ -2,6 +2,7 @@ const createTaskSection = document.querySelector('.newtask'),
 	createTaskInput = createTaskSection.querySelector('.newtask__name'),
 	setDateBtn = createTaskSection.querySelector('#setDateBtn'),
 	setTimeBtn = createTaskSection.querySelector('#setTimeBtn'),
+	setDateMenu = createTaskSection.querySelector('.setDateMenu'),
 	addTaskButton = createTaskSection.querySelector('.newtask__create');
 
 const taskListInDOM = document.querySelector('.list__items'),
@@ -188,3 +189,13 @@ createTaskInput.onkeydown = (e) => {
 };
 addTaskButton.onclick = createNewTask;
 document.onload = initTaskList();
+
+setDateMenu.onclick = (e) => {
+	if (e.target.matches('.setDateMenu__dropdown_item')) {
+		let selectedItemText = e.target.textContent;
+		let menuActive = setDateMenu.querySelector('.setDateMenu__selected');
+
+		menuActive.textContent = selectedItemText;
+	}
+	setDateMenu.toggleAttribute('opened');
+};
