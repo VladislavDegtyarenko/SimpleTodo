@@ -5,10 +5,6 @@ const createTaskSection = document.querySelector('.newtask'),
 	addTaskButton = createTaskSection.querySelector('.newtask__create');
 
 const taskListInDOM = document.querySelector('.list__items'),
-	sortByNameBtn = document.querySelector('#sortByName'),
-	sortByPriorityBtn = document.querySelector('#sortByPriority'),
-	sortByDeadlineBtn = document.querySelector('#sortByDeadline'),
-	clearListBtn = document.querySelector('#clearList'),
 	taskListName = 'Main Task List',
 	listButtons = document.querySelector('.list__buttons');
 
@@ -112,14 +108,17 @@ const doneTask = (e) => {
 	localStorage.setItem(taskListName, JSON.stringify(taskListFromStorage));
 };
 
-const loadTaskList = () => {
-	if (!localStorage[taskListName]) return;
-	let taskList = JSON.parse(localStorage[taskListName]);
-
+const revealAllTasksLoop = (taskList) => {
 	for (let i = 0; i < taskList.length; i++) {
 		let taskData = taskList[i];
 		revealTaskInDOM(taskData);
 	}
+};
+
+const initTaskList = () => {
+	if (!localStorage[taskListName]) return;
+	let taskList = JSON.parse(localStorage[taskListName]);
+	revealAllTasksLoop(taskList);
 };
 
 const sortTasks = (sortBtn, isReverse) => {
@@ -145,10 +144,7 @@ const sortTasks = (sortBtn, isReverse) => {
 	localStorage.setItem(taskListName, JSON.stringify(taskList));
 
 	taskListInDOM.innerHTML = '';
-	for (let i = 0; i < taskList.length; i++) {
-		let taskData = taskList[i];
-		revealTaskInDOM(taskData);
-	}
+	revealAllTasksLoop(taskList);
 };
 
 const clearList = () => {
@@ -191,4 +187,4 @@ createTaskInput.onkeydown = (e) => {
 	if (e.key === 'Escape') createTaskInput.blur();
 };
 addTaskButton.onclick = createNewTask;
-document.onload = loadTaskList();
+document.onload = initTaskList();
