@@ -98,7 +98,7 @@ const deleteTask = (e) => {
 
 const doneTask = (e) => {
 	const thisTask = e.target.parentElement.parentElement;
-	const taskId = Array.from(thisTask.parentElement.children).indexOf(thisTask) - 1;
+	const taskId = Array.from(thisTask.parentElement.children).indexOf(thisTask);
 	thisTask.toggleAttribute('done');
 
 	let taskListFromStorage = JSON.parse(localStorage.getItem(taskListName));
