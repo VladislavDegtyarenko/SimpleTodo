@@ -17,9 +17,8 @@ const createNewTask = () => {
 	//const taskDate = createTaskSection.querySelector('input[type="date"]')?.value || null;
 	//const taskTime = createTaskSection.querySelector('input[type="time"]')?.value || null;
 	const taskPriority = createTaskSection.querySelector('#priority').value;
-	const dateText = setDateMenu.getAttribute('data-date');
+	const relativeDate = setDateMenu.getAttribute('data-date');
 
-	taskDate = parseDateText(dateText);
 	taskTime = null;
 
 	const taskData = {
@@ -35,61 +34,6 @@ const createNewTask = () => {
 	//e.target.blur();
 	createTaskInput.value = '';
 };
-
-function parseDateText(dateText) {
-	let dateToday = new Date(),
-		absoluteDate;
-
-	if (dateText === 'Today') {
-		let year = dateToday.getFullYear(),
-			month = dateToday.getMonth(),
-			day = dateToday.getDate();
-		absoluteDate = `${year}-${month}-${day}`;
-	}
-
-	if (dateText === 'Tomorrow') {
-		let year = dateToday.getFullYear(),
-			month = dateToday.getMonth(),
-			day = dateToday.getDate() + 1;
-		absoluteDate = `${year}-${month}-${day}`;
-	}
-
-	if (dateText === 'This Weekend') {
-		let year = dateToday.getFullYear(),
-			month = dateToday.getMonth(),
-			dayOfTheWeek = (function () {
-				let day = dateToday.getDay();
-				if (day == 0) {
-					day = 7;
-				}
-				return day;
-			})(),
-			day = dateToday.getDate() + 6 - dayOfTheWeek;
-
-		absoluteDate = `${year}-${month}-${day}`;
-	}
-
-	if (dateText === 'Next Week') {
-		let year = dateToday.getFullYear(),
-			month = dateToday.getMonth(),
-			dayOfTheWeek = (function () {
-				let day = dateToday.getDay();
-				if (day == 0) {
-					day = 7;
-				}
-				return day;
-			})(),
-			day = dateToday.getDate() + 8 - dayOfTheWeek;
-
-		absoluteDate = `${year}-${month}-${day}`;
-	}
-
-	if (dateText === 'No Date') {
-		absoluteDate = null;
-	}
-
-	return absoluteDate;
-}
 
 function saveTaskInStorage(taskData) {
 	let tasksInTaskList = JSON.parse(localStorage.getItem(taskListName)) || [];
@@ -124,11 +68,15 @@ function revealTaskInDOM(taskData) {
 	}
 
 	if (taskDate) {
+		newTask.setAttribute('data-date', taskDate);
+		let listItemMainDiv = newTask.querySelector('.list__item_name');
+
 		let dateDiv = document.createElement('div');
-		let taskNameDiv = newTask.querySelector('.list__item_name');
 		dateDiv.classList.add('list__item_date');
+
 		dateDiv.innerHTML = taskDate;
-		insertAfter(dateDiv, taskNameDiv);
+
+		insertAfter(dateDiv, listItemMainDiv);
 	}
 
 	if (taskTime) {
@@ -225,7 +173,7 @@ listButtons.onclick = (e) => {
 	}
 };
 
-setDateBtn.onclick = (e) => {
+/* setDateBtn.onclick = (e) => {
 	const inputDate = createTaskSection.querySelector(`input[type="date"]`);
 	inputDate.style.display = 'inline-block';
 	setTimeBtn.style.display = 'inline-block';
@@ -236,7 +184,7 @@ setTimeBtn.onclick = (e) => {
 	const inputTime = createTaskSection.querySelector(`input[type="time"]`);
 	inputTime.style.display = 'inline-block';
 	e.target.style.display = 'none';
-};
+}; */
 
 insertAfter = (newNode, existingNode) => {
 	existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
@@ -250,12 +198,120 @@ addTaskButton.onclick = createNewTask;
 document.onload = initTaskList();
 
 setDateMenu.onclick = (e) => {
-	if (e.target.matches('.setDateMenu__dropdown_item')) {
-		let selectedItemText = e.target.textContent;
-		let menuActive = setDateMenu.querySelector('.setDateMenu__selected');
-		menuActive.textContent = selectedItemText;
+	const dropdownItems = setDateMenu.querySelectorAll('.setDateMenu__dropdown_item');
 
-		setDateMenu.setAttribute('data-date', selectedItemText);
+	dropdownItems.forEach((item) => {
+		let relativeDate = item.querySelector('.relativeDate').textContent,
+			textDate = item.querySelector('.textDate');
+		let dateConverted = relativeToShortDate(relativeDate);
+		textDate.innerHTML = dateConverted;
+	});
+
+	if (e.target.matches('.setDateMenu__dropdown_item')) {
+		let clickedMenuItemText = e.target.querySelector('.relativeDate').textContent;
+		let menuPlaceholder = setDateMenu.querySelector('.setDateMenu__selected');
+		menuPlaceholder.textContent = clickedMenuItemText;
+		setDateMenu.setAttribute('data-date', clickedMenuItemText);
 	}
 	setDateMenu.toggleAttribute('opened');
 };
+
+function convertRelativeDate(relativeDate) {
+	let dateToday = new Date(),
+		dateNum;
+
+	if (relativeDate === 'Today') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			day = dateToday.getDate();
+		dateNum = `${year}-${month}-${day}`;
+	}
+
+	if (relativeDate === 'Tomorrow') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			day = dateToday.getDate() + 1;
+		dateNum = `${year}-${month}-${day}`;
+	}
+
+	if (relativeDate === 'This Weekend') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			dayOfTheWeek = (function () {
+				let day = dateToday.getDay();
+				if (day == 0) {
+					day = 7;
+				}
+				return day;
+			})(),
+			day = dateToday.getDate() + 6 - dayOfTheWeek;
+
+		dateNum = `${year}-${month}-${day}`;
+	}
+
+	if (relativeDate === 'Next Week') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			dayOfTheWeek = (function () {
+				let day = dateToday.getDay();
+				if (day == 0) {
+					day = 7;
+				}
+				return day;
+			})(),
+			day = dateToday.getDate() + 8 - dayOfTheWeek;
+
+		dateNum = `${year}-${month}-${day}`;
+	}
+
+	if (relativeDate === 'No Date') {
+		dateNum = null;
+	}
+
+	return dateNum;
+}
+
+function relativeToShortDate(relativeDate) {
+	let dateToday = new Date(),
+		dateNum;
+
+	if (relativeDate === 'Today') return 'Today';
+
+	if (relativeDate === 'Tomorrow') return 'Tomorrow';
+
+	if (relativeDate === 'This Weekend') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			dayOfTheWeek = (function () {
+				let day = dateToday.getDay();
+				if (day == 0) {
+					day = 7;
+				}
+				return day;
+			})(),
+			day = dateToday.getDate() + 6 - dayOfTheWeek;
+
+		dateNum = `${day} ${month} ${year}`;
+	}
+
+	if (relativeDate === 'Next Week') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			dayOfTheWeek = (function () {
+				let day = dateToday.getDay();
+				if (day == 0) {
+					day = 7;
+				}
+				return day;
+			})(),
+			day = dateToday.getDate() + 8 - dayOfTheWeek;
+
+		dateNum = `${day} ${month} ${year}`;
+	}
+
+	if (relativeDate === 'No Date') {
+		dateNum = null;
+	}
+
+	return dateNum;
+}

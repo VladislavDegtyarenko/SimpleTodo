@@ -15,19 +15,34 @@
 				<input type="text" class="newtask__name" />
 
 				<div class="setDateMenu" data-date="Today">
-					<div class="setDateMenu__selected">Today</div>
+					<div class="setDateMenu__selected">No Date</div>
 					<div class="setDateMenu__dropdown">
-						<div class="setDateMenu__dropdown_item">Today</div>
-						<div class="setDateMenu__dropdown_item">Tomorrow</div>
-						<div class="setDateMenu__dropdown_item">This Weekend</div>
-						<div class="setDateMenu__dropdown_item">Next Week</div>
-						<div class="setDateMenu__dropdown_item">No Date</div>
+						<div class="setDateMenu__dropdown_item">
+							<span class="relativeDate">Today</span>
+							<span class="textDate"></span>
+						</div>
+						<div class="setDateMenu__dropdown_item">
+							<span class="relativeDate">Tomorrow</span>
+							<span class="textDate"></span>
+						</div>
+						<div class="setDateMenu__dropdown_item">
+							<span class="relativeDate">This Weekend</span>
+							<span class="textDate"></span>
+						</div>
+						<div class="setDateMenu__dropdown_item">
+							<span class="relativeDate">Next Week</span>
+							<span class="textDate"></span>
+						</div>
+						<div class="setDateMenu__dropdown_item">
+							<span class="relativeDate">No Date</span>
+							<span class="textDate"></span>
+						</div>
 					</div>
 				</div>
-				<button id="setDateBtn">Set Date</button>
+				<!-- <button id="setDateBtn">Set Date</button>
 				<input type="date" />
 				<button id="setTimeBtn">Set Time</button>
-				<input type="time" />
+				<input type="time" /> -->
 				<select name="priority" id="priority">
 					<option value="Priority 1">Priority 1</option>
 					<option value="Priority 2">Priority 2</option>
