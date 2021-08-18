@@ -14,9 +14,13 @@ const createNewTask = () => {
 	if (!taskName) return;
 
 	const taskIsDone = false;
-	const taskDate = createTaskSection.querySelector('input[type="date"]')?.value || null;
-	const taskTime = createTaskSection.querySelector('input[type="time"]')?.value || null;
+	//const taskDate = createTaskSection.querySelector('input[type="date"]')?.value || null;
+	//const taskTime = createTaskSection.querySelector('input[type="time"]')?.value || null;
 	const taskPriority = createTaskSection.querySelector('#priority').value;
+	const dateText = setDateMenu.getAttribute('data-date');
+
+	taskDate = parseDateText(dateText);
+	taskTime = null;
 
 	const taskData = {
 		taskName,
@@ -31,6 +35,61 @@ const createNewTask = () => {
 	//e.target.blur();
 	createTaskInput.value = '';
 };
+
+function parseDateText(dateText) {
+	let dateToday = new Date(),
+		absoluteDate;
+
+	if (dateText === 'Today') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			day = dateToday.getDate();
+		absoluteDate = `${year}-${month}-${day}`;
+	}
+
+	if (dateText === 'Tomorrow') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			day = dateToday.getDate() + 1;
+		absoluteDate = `${year}-${month}-${day}`;
+	}
+
+	if (dateText === 'This Weekend') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			dayOfTheWeek = (function () {
+				let day = dateToday.getDay();
+				if (day == 0) {
+					day = 7;
+				}
+				return day;
+			})(),
+			day = dateToday.getDate() + 6 - dayOfTheWeek;
+
+		absoluteDate = `${year}-${month}-${day}`;
+	}
+
+	if (dateText === 'Next Week') {
+		let year = dateToday.getFullYear(),
+			month = dateToday.getMonth(),
+			dayOfTheWeek = (function () {
+				let day = dateToday.getDay();
+				if (day == 0) {
+					day = 7;
+				}
+				return day;
+			})(),
+			day = dateToday.getDate() + 8 - dayOfTheWeek;
+
+		absoluteDate = `${year}-${month}-${day}`;
+	}
+
+	if (dateText === 'No Date') {
+		absoluteDate = null;
+	}
+
+	return absoluteDate;
+}
 
 function saveTaskInStorage(taskData) {
 	let tasksInTaskList = JSON.parse(localStorage.getItem(taskListName)) || [];
@@ -194,8 +253,9 @@ setDateMenu.onclick = (e) => {
 	if (e.target.matches('.setDateMenu__dropdown_item')) {
 		let selectedItemText = e.target.textContent;
 		let menuActive = setDateMenu.querySelector('.setDateMenu__selected');
-
 		menuActive.textContent = selectedItemText;
+
+		setDateMenu.setAttribute('data-date', selectedItemText);
 	}
 	setDateMenu.toggleAttribute('opened');
 };
