@@ -171,7 +171,9 @@ createTaskSection.onclick = (e) => {
    const createTaskBtnClick = e.target.matches(".newtask__create");
 
    if (dateMenuClick) {
-      setDateMenu.toggleAttribute("opened");
+      dateMenu.toggleAttribute("opened");
+   } else {
+      dateMenu.removeAttribute("opened");
    }
 
    if (dateMenuItemClick) {
