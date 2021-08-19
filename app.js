@@ -7,10 +7,10 @@ const createTaskSection = document.querySelector(".newtask"),
 
 const taskListInDOM = document.querySelector(".list__items"),
    taskListName = "Main Task List",
-   listButtons = document.querySelector(".list__buttons");
+   taskListControlBtns = document.querySelector(".list__buttons");
 
-const createNewTask = () => {
-   const taskName = createTaskInput.value.trim();
+const createNewTask = (input) => {
+   const taskName = input.value.trim();
    if (!taskName) return;
 
    const taskIsDone = false;
@@ -160,44 +160,56 @@ const clearList = () => {
    localStorage.removeItem(taskListName);
 };
 
-listButtons.onclick = (e) => {
-   if (e.target.matches("button")) {
-      if (e.target.classList.contains("sortBtn")) {
-         let sortBtn = e.target;
-         let isReverse = e.target.hasAttribute("reverse");
-         sortTasks(sortBtn, isReverse);
-      }
-      if (e.target.id === "clearList") {
-         clearList();
-      }
+createTaskSection.onclick = (e) => {
+   const input = createTaskSection.querySelector(".newtask__name");
+   const priority = createTaskSection.querySelector("#priority");
+   const dateMenu = createTaskSection.querySelector(".setDateMenu");
+   const dateMenuItem = createTaskSection.querySelector(".setDateMenu__dropdown_item");
+
+   const dateMenuClick = e.target.closest(".setDateMenu");
+   const dateMenuItemClick = e.target.matches(".setDateMenu__dropdown_item");
+   const createTaskBtnClick = e.target.matches(".newtask__create");
+
+   if (dateMenuClick) {
+      setDateMenu.toggleAttribute("opened");
+   }
+
+   if (dateMenuItemClick) {
+      let clickedMenuItemText = e.target.querySelector(".relativeDate").textContent;
+      let menuPlaceholder = setDateMenu.querySelector(".setDateMenu__selected");
+      menuPlaceholder.textContent = clickedMenuItemText;
+      let fullDateConverted = relativeToFullDate(clickedMenuItemText);
+      setDateMenu.setAttribute("data-date", fullDateConverted);
+      input.focus();
+   }
+
+   if (createTaskBtnClick) createNewTask(input);
+
+   input.onkeydown = (e) => {
+      if (e.key === "Enter" || e.code === "NumpadEnter") createNewTask(input);
+      if (e.key === "Escape") input.blur();
+   };
+
+   priority.onchange = (e) => {
+      input.focus();
+   };
+};
+
+taskListControlBtns.onclick = (e) => {
+   if (e.target.classList.contains("sortBtn")) {
+      let sortBtn = e.target;
+      let isReverse = e.target.hasAttribute("reverse");
+      sortTasks(sortBtn, isReverse);
+   }
+   if (e.target.id === "clearList") {
+      clearList();
    }
 };
 
-/* setDateBtn.onclick = (e) => {
-	const inputDate = createTaskSection.querySelector(`input[type="date"]`);
-	inputDate.style.display = 'inline-block';
-	setTimeBtn.style.display = 'inline-block';
-	e.target.style.display = 'none';
-};
-
-setTimeBtn.onclick = (e) => {
-	const inputTime = createTaskSection.querySelector(`input[type="time"]`);
-	inputTime.style.display = 'inline-block';
-	e.target.style.display = 'none';
-}; */
-
-insertAfter = (newNode, existingNode) => {
-   existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
-};
-
-createTaskInput.onkeydown = (e) => {
-   if (e.key === "Enter") createNewTask(e);
-   if (e.key === "Escape") createTaskInput.blur();
-};
-addTaskButton.onclick = createNewTask;
 document.onload = initTaskList();
+document.onload = shortDatesSuggestions();
 
-setDateMenu.onclick = (e) => {
+function shortDatesSuggestions() {
    const dropdownItems = setDateMenu.querySelectorAll(".setDateMenu__dropdown_item");
 
    dropdownItems.forEach((item) => {
@@ -206,16 +218,7 @@ setDateMenu.onclick = (e) => {
       let dateConverted = relativeToShortDate(relativeDate);
       textDate.innerHTML = dateConverted;
    });
-
-   if (e.target.matches(".setDateMenu__dropdown_item")) {
-      let clickedMenuItemText = e.target.querySelector(".relativeDate").textContent;
-      let menuPlaceholder = setDateMenu.querySelector(".setDateMenu__selected");
-      menuPlaceholder.textContent = clickedMenuItemText;
-      let fullDateConverted = relativeToFullDate(clickedMenuItemText);
-      setDateMenu.setAttribute("data-date", fullDateConverted);
-   }
-   setDateMenu.toggleAttribute("opened");
-};
+}
 
 function relativeToFullDate(relativeDate) {
    if (relativeDate === "No Date") return "";
@@ -343,4 +346,8 @@ function fullDateToRelative(fullDate) {
    if (daysToWeekend < 8 && someDate.getDay() == 1) {
       return "Next Week";
    }
+}
+
+function insertAfter(newNode, existingNode) {
+   existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }

@@ -34,15 +34,6 @@
    }
    input {
       margin-right: 10px;
-      &[type="date"] {
-         display: none;
-      }
-      &[type="time"] {
-         display: none;
-      }
-   }
-   #setTimeBtn {
-      display: none;
    }
    button {
       padding: 0 5px;
@@ -58,6 +49,8 @@
       border: solid 1px #888;
       border-radius: 3px;
       padding: 0 15px 0 5px;
+      pointer-events: none;
+      z-index: -1;
    }
    &__dropdown {
       display: none;
