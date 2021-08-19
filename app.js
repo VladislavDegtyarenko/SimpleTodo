@@ -74,7 +74,6 @@ function revealTaskInDOM(taskData) {
       dateDiv.classList.add("list__item_date");
 
       let relativeDate = fullDateToRelative(taskDate);
-      console.log(relativeDate);
       dateDiv.innerHTML = relativeDate;
 
       insertAfter(dateDiv, listItemMainDiv);
@@ -219,26 +218,29 @@ setDateMenu.onclick = (e) => {
 };
 
 function relativeToFullDate(relativeDate) {
-   let dateToday = new Date(),
-      dateNum;
+   if (relativeDate === "No Date") {
+      return "";
+   }
+
+   let dateToday = new Date();
 
    if (relativeDate === "Today") {
       let year = dateToday.getFullYear(),
-         month = dateToday.getMonth(),
+         month = dateToday.getMonth() + 1,
          day = dateToday.getDate();
-      dateNum = `${year}-${month}-${day}`;
+      return `${year}-${month}-${day}`;
    }
 
    if (relativeDate === "Tomorrow") {
       let year = dateToday.getFullYear(),
-         month = dateToday.getMonth(),
+         month = dateToday.getMonth() + 1,
          day = dateToday.getDate() + 1;
-      dateNum = `${year}-${month}-${day}`;
+      return `${year}-${month}-${day}`;
    }
 
    if (relativeDate === "This Weekend") {
       let year = dateToday.getFullYear(),
-         month = dateToday.getMonth(),
+         month = dateToday.getMonth() + 1,
          dayOfTheWeek = (function () {
             let day = dateToday.getDay();
             if (day == 0) {
@@ -248,12 +250,12 @@ function relativeToFullDate(relativeDate) {
          })(),
          day = dateToday.getDate() + 6 - dayOfTheWeek;
 
-      dateNum = `${year}-${month}-${day}`;
+      return `${year}-${month}-${day}`;
    }
 
    if (relativeDate === "Next Week") {
       let year = dateToday.getFullYear(),
-         month = dateToday.getMonth(),
+         month = dateToday.getMonth() + 1,
          dayOfTheWeek = (function () {
             let day = dateToday.getDay();
             if (day == 0) {
@@ -263,28 +265,23 @@ function relativeToFullDate(relativeDate) {
          })(),
          day = dateToday.getDate() + 8 - dayOfTheWeek;
 
-      dateNum = `${year}-${month}-${day}`;
+      return `${year}-${month}-${day}`;
    }
-
-   if (relativeDate === "No Date") {
-      dateNum = null;
-   }
-
-   return dateNum;
 }
 
 function relativeToShortDate(relativeDate) {
-   let dateToday = new Date(),
-      dateConverted;
+   if (relativeDate === "No Date") return null;
+
+   let dateToday = new Date();
 
    if (relativeDate === "Today") {
       let weekdayShort = dateToday.toLocaleString("default", { weekday: "short" });
-      dateConverted = weekdayShort;
+      return weekdayShort;
    }
 
    if (relativeDate === "Tomorrow") {
       let nextDay = new Date(dateToday.setDate(dateToday.getDate() + 1));
-      dateConverted = nextDay.toLocaleString("default", { weekday: "short" });
+      return nextDay.toLocaleString("default", { weekday: "short" });
    }
 
    if (relativeDate === "This Weekend") {
@@ -297,8 +294,8 @@ function relativeToShortDate(relativeDate) {
       })();
       let daysToSaturday = 6 - dayOfTheWeek;
       let weekendDay = new Date(dateToday.setDate(dateToday.getDate() + daysToSaturday));
-      dateConverted = weekendDay.toLocaleString("default", { weekday: "short" }); */
-      dateConverted = "Sat";
+      return weekendDay.toLocaleString("default", { weekday: "short" }); */
+      return "Sat";
    }
 
    if (relativeDate === "Next Week") {
@@ -311,36 +308,38 @@ function relativeToShortDate(relativeDate) {
       })();
       let daysToNextWeek = 6 - dayOfTheWeek;
       let weekendDay = new Date(dateToday.setDate(dateToday.getDate() + daysToNextWeek));
-      dateConverted = weekendDay.toLocaleString("default", { weekday: "short", day: "numeric", month: "short" });
+      return weekendDay.toLocaleString("default", { weekday: "short", day: "numeric", month: "short" });
    }
-
-   if (relativeDate === "No Date") dateConverted = null;
-
-   return dateConverted;
 }
 
 function fullDateToRelative(fullDate) {
    let dateToday = new Date(),
-      someDate = new Date(fullDate),
-      dateConverted;
+      someDate = new Date(fullDate);
 
    if (
       someDate.getDate() == dateToday.getDate() &&
-      someDate.getMonth() + 1 == dateToday.getMonth() &&
+      someDate.getMonth() == dateToday.getMonth() &&
       someDate.getFullYear() == dateToday.getFullYear()
    ) {
-      dateConverted = "Today";
+      return "Today";
    }
 
    if (
       someDate.getDate() == dateToday.getDate() + 1 &&
-      someDate.getMonth() + 1 == dateToday.getMonth() &&
+      someDate.getMonth() == dateToday.getMonth() &&
       someDate.getFullYear() == dateToday.getFullYear()
    ) {
-      dateConverted = "Tomorrow";
+      return "Tomorrow";
    }
 
    let daysToWeekend = 6 - dateToday.getDate();
+   let daysToNextWeek = 8 - dateToday.getDate();
 
-   return dateConverted;
+   if (daysToWeekend < 6 && someDate.getDay() == 6) {
+      return "This Weekend";
+   }
+
+   if (daysToWeekend < 8 && someDate.getDay() == 1) {
+      return "Next Week";
+   }
 }
