@@ -1,8 +1,5 @@
 const createTaskSection = document.querySelector(".newtask"),
-   createTaskInput = createTaskSection.querySelector(".newtask__name"),
-   setDateBtn = createTaskSection.querySelector("#setDateBtn"),
-   setTimeBtn = createTaskSection.querySelector("#setTimeBtn"),
-   setDateMenu = createTaskSection.querySelector(".setDateMenu"),
+   /* setDateMenu = createTaskSection.querySelector(".setDateMenu"), */
    addTaskButton = createTaskSection.querySelector(".newtask__create");
 
 const taskListInDOM = document.querySelector(".list__items"),
@@ -14,10 +11,8 @@ const createNewTask = (input) => {
    if (!taskName) return;
 
    const taskIsDone = false;
-   //const taskDate = createTaskSection.querySelector('input[type="date"]')?.value || null;
-   //const taskTime = createTaskSection.querySelector('input[type="time"]')?.value || null;
    const taskPriority = createTaskSection.querySelector("#priority").value;
-   const taskDate = setDateMenu.getAttribute("data-date"),
+   const taskDate = createTaskSection.querySelector(".setDateMenu").getAttribute("data-date"),
       taskTime = null;
 
    const taskData = {
@@ -30,69 +25,15 @@ const createNewTask = (input) => {
 
    saveTaskInStorage(taskData);
    revealTaskInDOM(taskData);
-   //e.target.blur();
-   createTaskInput.value = "";
+   input.value = "";
+   //input.blur();
 };
 
-function saveTaskInStorage(taskData) {
+const saveTaskInStorage = (taskData) => {
    let tasksInTaskList = JSON.parse(localStorage.getItem(taskListName)) || [];
    tasksInTaskList.push(taskData);
    localStorage.setItem(taskListName, JSON.stringify(tasksInTaskList));
-}
-
-function revealTaskInDOM(taskData) {
-   let { taskName, taskIsDone, taskDate, taskTime, taskPriority } = taskData;
-
-   let newTask = document.createElement("li");
-   newTask.classList.add("list__item");
-   newTask.setAttribute("data-priority", taskPriority);
-   newTask.innerHTML = `
-		<label>
-			<input type="checkbox" />
-		</label>
-      <div class="list__item_main">
-         <div class="list__item_name">${taskName}</div>
-		 <div class="list__item_priority">${taskPriority}</div>
-
-      </div>
-      <div class="list__item_buttons">
-         <button class="list__item_delete">X</button>
-      </div>
-   `;
-   taskListInDOM.appendChild(newTask);
-
-   if (taskIsDone) {
-      newTask.setAttribute("done", "");
-      newTask.querySelector("label input").checked = true;
-   }
-
-   if (taskDate) {
-      newTask.setAttribute("data-date", taskDate);
-      let listItemMainDiv = newTask.querySelector(".list__item_name");
-
-      let dateDiv = document.createElement("div");
-      dateDiv.classList.add("list__item_date");
-
-      let relativeDate = fullDateToRelative(taskDate);
-      dateDiv.innerHTML = relativeDate;
-
-      insertAfter(dateDiv, listItemMainDiv);
-   }
-
-   if (taskTime) {
-      let timeDiv = document.createElement("div");
-      let dateDiv = newTask.querySelector(".list__item_date");
-      timeDiv.classList.add("list__item_date");
-      timeDiv.innerHTML = taskTime;
-      insertAfter(timeDiv, dateDiv);
-   }
-
-   // initialize task buttons
-   let deleteButton = newTask.querySelector(".list__item_delete");
-   let doneButton = newTask.querySelector("label input");
-   deleteButton.onclick = deleteTask;
-   doneButton.onclick = doneTask;
-}
+};
 
 const deleteTask = (e) => {
    const thisTask = e.target.closest(".list__item");
@@ -114,6 +55,60 @@ const doneTask = (e) => {
    taskObj.taskIsDone = !taskObj.taskIsDone;
    taskListFromStorage.splice(taskId, 1, taskObj);
    localStorage.setItem(taskListName, JSON.stringify(taskListFromStorage));
+};
+
+const revealTaskInDOM = (taskData) => {
+   let { taskName, taskIsDone, taskDate, taskTime, taskPriority } = taskData;
+
+   let taskDiv = document.createElement("li");
+   taskDiv.classList.add("list__item");
+   taskDiv.setAttribute("data-priority", taskPriority);
+   taskDiv.innerHTML = `
+		<label>
+			<input type="checkbox" />
+		</label>
+      <div class="list__item_main">
+         <div class="list__item_name">${taskName}</div>
+		 <div class="list__item_priority">${taskPriority}</div>
+
+      </div>
+      <div class="list__item_buttons">
+         <button class="list__item_delete">X</button>
+      </div>
+   `;
+   taskListInDOM.appendChild(taskDiv);
+
+   if (taskIsDone) {
+      taskDiv.setAttribute("done", "");
+      taskDiv.querySelector("label input").checked = true;
+   }
+
+   if (taskDate) {
+      taskDiv.setAttribute("data-date", taskDate);
+      let listItemMainDiv = taskDiv.querySelector(".list__item_name");
+
+      let dateDiv = document.createElement("div");
+      dateDiv.classList.add("list__item_date");
+
+      let relativeDate = fullDateToRelative(taskDate);
+      dateDiv.innerHTML = relativeDate;
+
+      insertAfter(dateDiv, listItemMainDiv);
+   }
+
+   if (taskTime) {
+      let timeDiv = document.createElement("div");
+      let dateDiv = taskDiv.querySelector(".list__item_date");
+      timeDiv.classList.add("list__item_date");
+      timeDiv.innerHTML = taskTime;
+      insertAfter(timeDiv, dateDiv);
+   }
+
+   // initialize task buttons
+   let deleteButton = taskDiv.querySelector(".list__item_delete");
+   let doneButton = taskDiv.querySelector("label input");
+   deleteButton.onclick = deleteTask;
+   doneButton.onclick = doneTask;
 };
 
 const revealAllTasksLoop = (taskList) => {
@@ -160,59 +155,8 @@ const clearList = () => {
    localStorage.removeItem(taskListName);
 };
 
-createTaskSection.onclick = (e) => {
-   const input = createTaskSection.querySelector(".newtask__name");
-   const priority = createTaskSection.querySelector("#priority");
-   const dateMenu = createTaskSection.querySelector(".setDateMenu");
-   const dateMenuItem = createTaskSection.querySelector(".setDateMenu__dropdown_item");
-
-   const dateMenuClick = e.target.closest(".setDateMenu");
-   const dateMenuItemClick = e.target.matches(".setDateMenu__dropdown_item");
-   const createTaskBtnClick = e.target.matches(".newtask__create");
-
-   if (dateMenuClick) {
-      dateMenu.toggleAttribute("opened");
-   } else {
-      dateMenu.removeAttribute("opened");
-   }
-
-   if (dateMenuItemClick) {
-      let clickedMenuItemText = e.target.querySelector(".relativeDate").textContent;
-      let menuPlaceholder = setDateMenu.querySelector(".setDateMenu__selected");
-      menuPlaceholder.textContent = clickedMenuItemText;
-      let fullDateConverted = relativeToFullDate(clickedMenuItemText);
-      setDateMenu.setAttribute("data-date", fullDateConverted);
-      input.focus();
-   }
-
-   if (createTaskBtnClick) createNewTask(input);
-
-   input.onkeydown = (e) => {
-      if (e.key === "Enter" || e.code === "NumpadEnter") createNewTask(input);
-      if (e.key === "Escape") input.blur();
-   };
-
-   priority.onchange = (e) => {
-      input.focus();
-   };
-};
-
-taskListControlBtns.onclick = (e) => {
-   if (e.target.classList.contains("sortBtn")) {
-      let sortBtn = e.target;
-      let isReverse = e.target.hasAttribute("reverse");
-      sortTasks(sortBtn, isReverse);
-   }
-   if (e.target.id === "clearList") {
-      clearList();
-   }
-};
-
-document.onload = initTaskList();
-document.onload = shortDatesSuggestions();
-
-function shortDatesSuggestions() {
-   const dropdownItems = setDateMenu.querySelectorAll(".setDateMenu__dropdown_item");
+const showShortDatesInMenu = (dateMenu) => {
+   const dropdownItems = dateMenu.querySelectorAll(".setDateMenu__dropdown_item");
 
    dropdownItems.forEach((item) => {
       let relativeDate = item.querySelector(".relativeDate").textContent,
@@ -220,9 +164,9 @@ function shortDatesSuggestions() {
       let dateConverted = relativeToShortDate(relativeDate);
       textDate.innerHTML = dateConverted;
    });
-}
+};
 
-function relativeToFullDate(relativeDate) {
+const relativeToFullDate = (relativeDate) => {
    if (relativeDate === "No Date") return "";
 
    let dateToday = new Date();
@@ -270,9 +214,9 @@ function relativeToFullDate(relativeDate) {
 
       return `${year}-${month}-${day}`;
    }
-}
+};
 
-function relativeToShortDate(relativeDate) {
+const relativeToShortDate = (relativeDate) => {
    if (relativeDate === "No Date") return null;
 
    let dateToday = new Date();
@@ -288,37 +232,16 @@ function relativeToShortDate(relativeDate) {
       return nextDayShort;
    }
 
-   if (relativeDate === "This Weekend") {
-      /* let dayOfTheWeek = (function () {
-         let day = dateToday.getDay();
-         if (day == 0) {
-            day = 7;
-         }
-         return day;
-      })();
-      let daysToSaturday = 6 - dayOfTheWeek;
-      let weekendDay = new Date(dateToday.setDate(dateToday.getDate() + daysToSaturday));
-      return weekendDay.toLocaleString("default", { weekday: "short" }); */
-      return "Sat";
-   }
+   if (relativeDate === "This Weekend") return "Sat";
 
    if (relativeDate === "Next Week") {
-      /*       let dayOfTheWeek = (function () {
-         let day = dateToday.getDay();
-         if (day == 0) {
-            day = 7;
-         }
-         return day;
-      })();
-      let daysToNextWeek = 6 - dayOfTheWeek;
-      let weekendDay = new Date(dateToday.setDate(dateToday.getDate() + daysToNextWeek));
-      let weekendDayShort = weekendDay.toLocaleString("default", { weekday: "short", day: "numeric", month: "short" });
-      return weekendDayShort; */
-      return "Mon";
+      let nextMonday = new Date(dateToday.setDate(dateToday.getDate() + ((1 + 7 - dateToday.getDay()) % 7)));
+      let nextMondayShort = nextMonday.toLocaleString("default", { weekday: "short", day: "numeric", month: "short" });
+      return nextMondayShort;
    }
-}
+};
 
-function fullDateToRelative(fullDate) {
+const fullDateToRelative = (fullDate) => {
    let dateToday = new Date(),
       someDate = new Date(fullDate);
 
@@ -348,8 +271,62 @@ function fullDateToRelative(fullDate) {
    if (daysToWeekend < 8 && someDate.getDay() == 1) {
       return "Next Week";
    }
-}
+};
 
-function insertAfter(newNode, existingNode) {
+const insertAfter = (newNode, existingNode) => {
    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
-}
+};
+
+createTaskSection.onclick = (e) => {
+   const input = createTaskSection.querySelector(".newtask__name");
+   const priority = createTaskSection.querySelector("#priority");
+   const dateMenu = createTaskSection.querySelector(".setDateMenu");
+
+   const dateMenuClick = e.target.closest(".setDateMenu");
+   const dateMenuItemClick = e.target.matches(".setDateMenu__dropdown_item");
+   const createTaskBtnClick = e.target.matches(".newtask__create");
+
+   if (dateMenuClick) {
+      dateMenu.toggleAttribute("opened");
+      showShortDatesInMenu(dateMenu);
+   } else {
+      dateMenu.removeAttribute("opened");
+   }
+
+   if (dateMenuItemClick) {
+      let clickedMenuItemText = e.target.querySelector(".relativeDate").textContent;
+      let menuPlaceholder = dateMenu.querySelector(".setDateMenu__selected");
+      let fullDateConverted = relativeToFullDate(clickedMenuItemText);
+      menuPlaceholder.textContent = clickedMenuItemText;
+      dateMenu.setAttribute("data-date", fullDateConverted);
+      input.focus();
+   }
+
+   if (createTaskBtnClick) createNewTask(input);
+
+   input.onkeydown = (e) => {
+      const enterKey = e.key === "Enter" || e.code === "NumpadEnter" || e.code === 13;
+      const escapeKey = e.key === "Escape";
+
+      if (enterKey) createNewTask(input);
+      if (escapeKey) input.blur();
+   };
+
+   priority.onchange = () => input.focus();
+};
+
+taskListControlBtns.onclick = (e) => {
+   const sortBtn = e.target.classList.contains("sortBtn"),
+      clearListBtn = e.target.id === "clearList";
+
+   if (sortBtn) {
+      let sortBtn = e.target;
+      let isReverse = e.target.hasAttribute("reverse");
+      sortTasks(sortBtn, isReverse);
+   }
+   if (clearListBtn) {
+      clearList();
+   }
+};
+
+document.onload = initTaskList();
