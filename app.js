@@ -218,9 +218,7 @@ setDateMenu.onclick = (e) => {
 };
 
 function relativeToFullDate(relativeDate) {
-   if (relativeDate === "No Date") {
-      return "";
-   }
+   if (relativeDate === "No Date") return "";
 
    let dateToday = new Date();
 
@@ -281,7 +279,8 @@ function relativeToShortDate(relativeDate) {
 
    if (relativeDate === "Tomorrow") {
       let nextDay = new Date(dateToday.setDate(dateToday.getDate() + 1));
-      return nextDay.toLocaleString("default", { weekday: "short" });
+      let nextDayShort = nextDay.toLocaleString("default", { weekday: "short" });
+      return nextDayShort;
    }
 
    if (relativeDate === "This Weekend") {
@@ -299,7 +298,7 @@ function relativeToShortDate(relativeDate) {
    }
 
    if (relativeDate === "Next Week") {
-      let dayOfTheWeek = (function () {
+      /*       let dayOfTheWeek = (function () {
          let day = dateToday.getDay();
          if (day == 0) {
             day = 7;
@@ -308,7 +307,9 @@ function relativeToShortDate(relativeDate) {
       })();
       let daysToNextWeek = 6 - dayOfTheWeek;
       let weekendDay = new Date(dateToday.setDate(dateToday.getDate() + daysToNextWeek));
-      return weekendDay.toLocaleString("default", { weekday: "short", day: "numeric", month: "short" });
+      let weekendDayShort = weekendDay.toLocaleString("default", { weekday: "short", day: "numeric", month: "short" });
+      return weekendDayShort; */
+      return "Mon";
    }
 }
 
