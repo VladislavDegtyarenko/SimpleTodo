@@ -1,71 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>
-		<link rel="stylesheet" href="css/style.min.css" />
-	</head>
-	<body>
-		<div class="container">
-			<h1 class="title">SimpleTodo</h1>
+   <head>
+      <meta charset="UTF-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Document</title>
+      <link rel="stylesheet" href="css/style.min.css" />
+   </head>
+   <body>
+      <div class="container">
+         <h1 class="title">SimpleTodo</h1>
 
-			<div class="newtask">
-				<input type="text" class="newtask__name" />
+         <div class="newtask">
+            <input type="text" class="newtask__name" />
 
-				<div class="setDateMenu" data-date="Today">
-					<div class="setDateMenu__selected">No Date</div>
-					<div class="setDateMenu__dropdown">
-						<div class="setDateMenu__dropdown_item">
-							<span class="relativeDate">Today</span>
-							<span class="shortDate"></span>
-						</div>
-						<div class="setDateMenu__dropdown_item">
-							<span class="relativeDate">Tomorrow</span>
-							<span class="shortDate"></span>
-						</div>
-						<div class="setDateMenu__dropdown_item">
-							<span class="relativeDate">This Weekend</span>
-							<span class="shortDate"></span>
-						</div>
-						<div class="setDateMenu__dropdown_item">
-							<span class="relativeDate">Next Week</span>
-							<span class="shortDate"></span>
-						</div>
-						<div class="setDateMenu__dropdown_item">
-							<span class="relativeDate">No Date</span>
-							<span class="shortDate"></span>
-						</div>
-					</div>
-				</div>
-				<!-- <button id="setDateBtn">Set Date</button>
+            <div class="setDateMenu" data-date="No Date">
+               <div class="setDateMenu__selected">No Date</div>
+               <div class="setDateMenu__dropdown">
+                  <div class="setDateMenu__dropdown_item">
+                     <span class="relativeDate">Today</span>
+                     <span class="shortDate"></span>
+                  </div>
+                  <div class="setDateMenu__dropdown_item">
+                     <span class="relativeDate">Tomorrow</span>
+                     <span class="shortDate"></span>
+                  </div>
+                  <div class="setDateMenu__dropdown_item">
+                     <span class="relativeDate">This Weekend</span>
+                     <span class="shortDate"></span>
+                  </div>
+                  <div class="setDateMenu__dropdown_item">
+                     <span class="relativeDate">Next Week</span>
+                     <span class="shortDate"></span>
+                  </div>
+                  <div class="setDateMenu__dropdown_item">
+                     <span class="relativeDate">No Date</span>
+                     <span class="shortDate"></span>
+                  </div>
+               </div>
+            </div>
+            <!-- <button id="setDateBtn">Set Date</button>
 				<input type="date" />
 				<button id="setTimeBtn">Set Time</button>
 				<input type="time" /> -->
-				<select name="priority" id="priority">
-					<option value="Priority 1">Priority 1</option>
-					<option value="Priority 2">Priority 2</option>
-					<option value="Priority 3">Priority 3</option>
-					<option value="Priority 4" selected="selected">Priority 4</option>
-				</select>
+            <select name="priority" id="priority">
+               <option value="Priority 1">Priority 1</option>
+               <option value="Priority 2">Priority 2</option>
+               <option value="Priority 3">Priority 3</option>
+               <option value="Priority 4" selected="selected">Priority 4</option>
+            </select>
 
-				<button class="newtask__create">Create</button>
-			</div>
+            <button class="newtask__create">Create</button>
+         </div>
 
-			<div class="list">
-				<div class="list__buttons">
-					<button class="list__buttons_sort sortBtn" id="sortByName">Sort By Name</button>
-					<button class="list__buttons_sort sortBtn" id="sortByPriority">
-						Sort By Priority
-					</button>
-					<button class="list__buttons_sort sortBtn" id="sortByDeadline">Sort By DL</button>
-					<button id="clearList">Clear List</button>
-				</div>
-				<ul class="list__items"></ul>
-			</div>
+         <div class="list">
+            <div class="list__buttons">
+               <button class="list__buttons_sort sortBtn" id="sortByName">Sort By Name</button>
+               <button class="list__buttons_sort sortBtn" id="sortByPriority">Sort By Priority</button>
+               <button class="list__buttons_sort sortBtn" id="sortByDeadline">Sort By DL</button>
+               <button id="clearList">Clear List</button>
+            </div>
+            <ul class="list__items"></ul>
+         </div>
 
-			<!-- <li class="list__item" data-priority="2">
+         <!-- <li class="list__item" data-priority="2">
 				<label>
 					<input type="checkbox" />
 				</label>
@@ -79,8 +77,8 @@
 					<button class="list__item_delete">X</button>
 				</div>
 			</li> -->
-		</div>
+      </div>
 
-		<script src="app.js"></script>
-	</body>
+      <script src="app.js"></script>
+   </body>
 </html>

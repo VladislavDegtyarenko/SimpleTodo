@@ -17,9 +17,8 @@ const createNewTask = () => {
    //const taskDate = createTaskSection.querySelector('input[type="date"]')?.value || null;
    //const taskTime = createTaskSection.querySelector('input[type="time"]')?.value || null;
    const taskPriority = createTaskSection.querySelector("#priority").value;
-   const relativeDate = setDateMenu.getAttribute("data-date");
-
-   taskTime = null;
+   const taskDate = setDateMenu.getAttribute("data-date"),
+      taskTime = null;
 
    const taskData = {
       taskName,
@@ -74,7 +73,9 @@ function revealTaskInDOM(taskData) {
       let dateDiv = document.createElement("div");
       dateDiv.classList.add("list__item_date");
 
-      dateDiv.innerHTML = taskDate;
+      let relativeDate = fullDateToRelative(taskDate);
+      console.log(relativeDate);
+      dateDiv.innerHTML = relativeDate;
 
       insertAfter(dateDiv, listItemMainDiv);
    }
@@ -211,12 +212,13 @@ setDateMenu.onclick = (e) => {
       let clickedMenuItemText = e.target.querySelector(".relativeDate").textContent;
       let menuPlaceholder = setDateMenu.querySelector(".setDateMenu__selected");
       menuPlaceholder.textContent = clickedMenuItemText;
-      setDateMenu.setAttribute("data-date", clickedMenuItemText);
+      let fullDateConverted = relativeToFullDate(clickedMenuItemText);
+      setDateMenu.setAttribute("data-date", fullDateConverted);
    }
    setDateMenu.toggleAttribute("opened");
 };
 
-function convertRelativeDate(relativeDate) {
+function relativeToFullDate(relativeDate) {
    let dateToday = new Date(),
       dateNum;
 
@@ -313,6 +315,32 @@ function relativeToShortDate(relativeDate) {
    }
 
    if (relativeDate === "No Date") dateConverted = null;
+
+   return dateConverted;
+}
+
+function fullDateToRelative(fullDate) {
+   let dateToday = new Date(),
+      someDate = new Date(fullDate),
+      dateConverted;
+
+   if (
+      someDate.getDate() == dateToday.getDate() &&
+      someDate.getMonth() + 1 == dateToday.getMonth() &&
+      someDate.getFullYear() == dateToday.getFullYear()
+   ) {
+      dateConverted = "Today";
+   }
+
+   if (
+      someDate.getDate() == dateToday.getDate() + 1 &&
+      someDate.getMonth() + 1 == dateToday.getMonth() &&
+      someDate.getFullYear() == dateToday.getFullYear()
+   ) {
+      dateConverted = "Tomorrow";
+   }
+
+   let daysToWeekend = 6 - dateToday.getDate();
 
    return dateConverted;
 }
