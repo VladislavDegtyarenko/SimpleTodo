@@ -9,7 +9,7 @@ const createNewTask = (input) => {
 
 	const taskIsDone = false;
 	const taskPriority = createTaskSection.querySelector('#priority').value;
-	const taskDate = createTaskSection.querySelector('.setDateMenu').getAttribute('data-date'),
+	const taskDate = createTaskSection.querySelector('.dateMenu').getAttribute('data-date'),
 		taskTime = null;
 
 	const taskData = {
@@ -153,7 +153,7 @@ const clearList = () => {
 };
 
 const showShortDatesInMenu = (dateMenu) => {
-	const dropdownItems = dateMenu.querySelectorAll('.setDateMenu__dropdown_item');
+	const dropdownItems = dateMenu.querySelectorAll('.dateMenu__item');
 
 	dropdownItems.forEach((item) => {
 		let relativeDate = item.querySelector('.relativeDate').textContent,
@@ -283,10 +283,10 @@ const insertAfter = (newNode, existingNode) => {
 createTaskSection.onclick = (e) => {
 	const input = createTaskSection.querySelector('.newtask__name');
 	const priority = createTaskSection.querySelector('#priority');
-	const dateMenu = createTaskSection.querySelector('.setDateMenu');
+	const dateMenu = createTaskSection.querySelector('.dateMenu');
 
-	const dateMenuClick = e.target.closest('.setDateMenu');
-	const dateMenuItemClick = e.target.matches('.setDateMenu__dropdown_item');
+	const dateMenuClick = e.target.closest('.dateMenu');
+	const dateMenuItemClick = e.target.matches('.dateMenu__item');
 	const createTaskBtnClick = e.target.matches('.newtask__create');
 
 	if (dateMenuClick) {
@@ -298,7 +298,7 @@ createTaskSection.onclick = (e) => {
 
 	if (dateMenuItemClick) {
 		let clickedMenuItemText = e.target.querySelector('.relativeDate').textContent;
-		let menuPlaceholder = dateMenu.querySelector('.setDateMenu__selected');
+		let menuPlaceholder = dateMenu.querySelector('.dateMenu__selected');
 		let fullDateConverted = relativeToFullDate(clickedMenuItemText);
 		menuPlaceholder.textContent = clickedMenuItemText;
 		dateMenu.setAttribute('data-date', fullDateConverted);
